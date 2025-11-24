@@ -1,4 +1,4 @@
-#configuração do banco de dados Novadrive Bank - PostgreSQL
+#configuração do banco de dados Nova drive Bank - PostgreSQL
 database_config:
   dbname: 'novadrivebank'
   user: 'etlreadonlybank'
