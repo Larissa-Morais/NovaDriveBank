@@ -67,6 +67,15 @@ def save_scalers(df, nome_colunas):
         joblib.dump(scaler, f"./objects/scaler{nome_coluna}.joblib") #salva o scaler treinado em uma pasta
     return df
 
+#função label encoding
+def save_encoders(df, nome_colunas):
+    for nome_coluna in nome_colunas: #itera sobre as colunas fornecidas 
+        labelenconcer = LabelEncoder() #LabelEncoder converte dados categóricos em valores numéricos
+        df[nome_coluna] = labelenconcer.fit_transform(df[[nome_coluna]]) #ajusta e transforma os dados da coluna
+        joblib.dump(labelenconcer, f"./objects/scaler{nome_coluna}.joblib") #salva o encoder treinado em uma pasta
+    return df
+
+
                 
 
 
