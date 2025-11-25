@@ -44,7 +44,31 @@ def substitui_nulos(df):
         else:
             mediana = df[coluna].median() #calcula a mediana da coluna
             df[coluna].fillna(mediana, inplace=True)
-            
+    
+#função para corrigir erros de digitação
+def corrigir_erros_digitacao(df, coluna, lista_valida):
+    for i, valor in enumerate(df[coluna]): #itera sobre os valores da coluna
+        valor_str = str(valor) if pd.notnull(valor) else valor #converte o valor para string se não for nulo
+        
+        if valor_str not in lista_valida and pd.notnull(valor_str): #verifica se o valor não está na lista válida e não é nulo
+            correcao = process.extractOne(valor_str, lista_valida)[0] #encontra a melhor correspondência na lista válida
+            df.at[i, coluna] = correcao #substitui o valor incorreto pela correção encontrada
+
+#função para tratamento de outliers
+def tratar_outliers(df, coluna, minimo, maximo):
+    mediana = df[(df[coluna] >= minimo) & (df[coluna] <= maximo)][coluna].median() #calcula a mediana dos valores 
+    df[coluna] = df[coluna].apply(lambda x: mediana if x < minimo or x > maximo else x) #substitui os outliers pela mediana
+    return df
+
+#função de normalização 
+def save_scalers(df, nome_colunas): 
+    for nome_coluna in nome_colunas: #itera sobre as colunas fornecidas 
+        scaler = StandardScaler() #StandardScaler é um método de normalização que padroniza os dados para terem média 0 e desvio padrão 1
+        df[nome_coluna] = scaler.fit_transform(df[[nome_coluna]]) #ajusta e transforma os dados da coluna
+        joblib.dump(scaler, f"./objects/scaler{nome_coluna}.joblib") #salva o scaler treinado em uma pasta
+    return df
+
+                
 
 
 
