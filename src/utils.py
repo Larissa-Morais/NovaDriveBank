@@ -1,12 +1,11 @@
-#funções utilitárias 
-
 import pandas as pd #biblioteca para manipulação de dados
 import yaml #biblioteca para manipulação de arquivos yaml
 import psycopg2 #biblioteca para conectar ao banco de dados postgresql
-from fuzzywuzzy import process #biblioteca para correspondência de strings
-from sklearn.preprocessing import StandardScaler, LabelEncoder
 import joblib #biblioteca para salvar e carregar modelos treinados
 import const #importa o arquivo de constantes
+
+from fuzzywuzzy import process #biblioteca para correspondência de strings
+from sklearn.preprocessing import StandardScaler, LabelEncoder
 
 #função para obter dados do banco de dados
 def get_data_from_db(sql_query): 
