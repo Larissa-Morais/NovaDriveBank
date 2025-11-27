@@ -34,7 +34,7 @@ for coluna in variaveis_numericas:
     plt.show()
 #criação do histograma para variáveis numéricas
     df[coluna].hist(bins=20, figsize=(10, 6))
-    plt.title(f'Histograma de ')
+    plt.title(f'Histograma de {coluna}')
     plt.ylabel('Frequência')
     plt.show()
 
