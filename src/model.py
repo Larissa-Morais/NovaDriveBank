@@ -8,8 +8,8 @@ import const
 from datetime import datetime #manipulação de datas
 from sklearn.preprocessing import StandardScaler, LabelEncoder #pré-processamento de dados
 from sklearn.model_selection import train_test_split #divisão dos dados em treino e teste
-from sklearn.preprocessing import classification_report, confusion_matrix #avaliação do modelo
-from sklearn.preprocessing import RandomForestClassifier #modelo de classificação
+from sklearn.metrics import classification_report, confusion_matrix #avaliação do modelo
+from sklearn.ensemble import RandomForestClassifier #modelo de classificação
 from sklearn.feature_selection import RFE #seleção de características
 
 from utils import *
@@ -46,14 +46,14 @@ df['proporcaosolicitadototal'] = df['proporcaosolicitadototal'].astype(float)
 
 #dividir dados entre treino e teste
 X = df.drop('classe', axis=1) #remove a coluna 'classe de df pois é a variavel que deve prever
-y = df['classe'] #coloca a coluna 'classe' em y, que é a variável alvo
+y = df['classe']#variável alvo
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=seed) #80% treino, 20% teste
 
 #normalização
 X_test = save_scalers(X_test, ['tempoprofissao', 'renda', 'idade', 'dependentes', 
-                               'valorsolicitado', 'valortotalbem', 'proporcaosolitcitadototal'])
+                               'valorsolicitado', 'valortotalbem', 'proporcaosolicitadototal'])
 X_train = save_scalers(X_train, ['tempoprofissao', 'renda', 'idade', 'dependentes', 
-                               'valorsolicitado', 'valortotalbem', 'proporcaosolitcitadototal'])
+                               'valorsolicitado', 'valortotalbem', 'proporcaosolicitadototal'])
 
 #codificação
 mapeamento = {'ruim': 0, 'bom': 1} 
@@ -71,4 +71,4 @@ selector = selector.fit(X_train, y_train)
 #transforma os dados
 X_train = selector.transform(X_train) #aplica a seleção de características nos dados de treino
 X_test = selector.transform(X_test) #aplica a seleção de características nos dados de teste
-joblib.dump(selector, './objects/selector.joblib') #salva o seletor treinado em uma pasta
+save_object(selector, "selector.joblib") #salva o seletor de características (se encontra em utils.py)
