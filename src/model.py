@@ -96,8 +96,8 @@ model.compile(optimizer=optimizer, loss = 'binary_crossentropy', metrics = ['acc
 #Treinando o modelo
 model.fit(X_train, 
           y_train, 
-          validation_split = 0.2, #20% dos dados de treino para validação
-          epochs = 500,  #número de vezes que o modelo verá todo o dataset
+          validation_split = 0.3, #20% dos dados de treino para validação
+          epochs = 200,  #número de vezes que o modelo verá todo o dataset
           batch_size = 10, #quantidade de amostras processadas antes de atualizar os pesos do modelo
           verbose = 1 #exibe o progresso do treinamento
           
