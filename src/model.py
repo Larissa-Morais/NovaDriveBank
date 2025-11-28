@@ -94,12 +94,14 @@ optimizer = tf.keras.optimizers.Adam(learning_rate = 0.001) #taxa de aprendizado
 model.compile(optimizer=optimizer, loss = 'binary_crossentropy', metrics = ['accuracy']) #compila o modelo com a função de perda binária e métrica de acurácia
 
 #Treinando o modelo
+class_weight = {0: 2, 1: 1}
 model.fit(X_train, 
           y_train, 
-          validation_split = 0.3, #20% dos dados de treino para validação
+          validation_split = 0.3, #30% dos dados de treino para validação
           epochs = 200,  #número de vezes que o modelo verá todo o dataset
           batch_size = 10, #quantidade de amostras processadas antes de atualizar os pesos do modelo
-          verbose = 1 #exibe o progresso do treinamento
+          verbose = 1, #exibe o progresso do treinamento
+          class_weight = class_weight
           
 )  
 #Salva modelo
