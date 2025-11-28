@@ -14,6 +14,8 @@ from sklearn.feature_selection import RFE #seleção de características
 
 from utils import *
 
+#-- pré-processamento de dados
+
 #definição da semente para geração de resultados pseudoaleatórios
 seed = 41
 np.random.seed(seed)
@@ -72,3 +74,45 @@ selector = selector.fit(X_train, y_train)
 X_train = selector.transform(X_train) #aplica a seleção de características nos dados de treino
 X_test = selector.transform(X_test) #aplica a seleção de características nos dados de teste
 save_object(selector, "selector.joblib") #salva o seletor de características (se encontra em utils.py)
+
+#-- Modelagem de dados
+#keras é uma API de alto nível que facilita a criação e treinamento de modelos de deep learning
+model = tf.keras.Sequential([ #as camadas são empilhadas lineralmente. Cada camada processa a saída da anterior
+    tf.keras.layers.Dense(128, activation = 'relu', input_shape = (X_train.shape[1],)), #camada densa com 128 neurônios e função de ativação ReLU
+    tf.keras.layers.Dropout(0.3),                                                        #RELU: valores negativos são descartados (viram 0), e apenas valores positivos seguem para a próxima camada.
+    tf.keras.layers.Dense(64, activation = 'relu'),
+    tf.keras.layers.Dropout(0.3), #adiciona dropout para evitar overfitting(desconexão aleatória de 30% dos neurônios)
+    tf.keras.layers.Dense(32, activation = 'relu'),
+    tf.keras.layers.Dropout(0.3),
+    tf.keras.layers.Dense(1, activation = 'sigmoid') #camada de saída com 1 neurônio e função de ativação sigmoide (para classificação binária)
+])
+#Configurando o otimizador
+#Adam é um otimizador que ajusta os pesos da RN durante o treino
+optimizer = tf.keras.optimizers.Adam(learning_rate = 0.001) #taxa de aprendizado de 0.001 para controlar a velocidade de ajuste dos pesos
+
+#Compilando o modelo
+model.compile(optimizer=optimizer, loss = 'binary_crossentropy', metrics = ['accuracy']) #compila o modelo com a função de perda binária e métrica de acurácia
+
+#Treinando o modelo
+model.fit(X_train, 
+          y_train, 
+          validation_split = 0.2, #20% dos dados de treino para validação
+          epochs = 500,  #número de vezes que o modelo verá todo o dataset
+          batch_size = 10, #quantidade de amostras processadas antes de atualizar os pesos do modelo
+          verbose = 1 #exibe o progresso do treinamento
+          
+)  
+#Salva modelo
+model.save('model/novadrivebank_model.keras')
+
+#Previsões
+y_pred = model.predict(X_test) #faz previsões utilizando os dados de teste para prever a classe y
+y_pred = (y_pred > 0.5).astype(int) #converte as probabilidades em classes binárias (0 ou 1) com threshold(valor limite da classe) de 0.5
+
+#Avaliação do modelo
+print('Avaliação do Modelo nos dados de teste: ')
+model.evaluate(X_test, y_test)
+
+#Métricas de classificação
+print('Relatório de Classificação: ')
+print(classification_report(y_test, y_pred)) #exibe métricas detalhadas de precisão, recall e F1-score
