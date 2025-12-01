@@ -78,7 +78,7 @@ def tratar_outliers(df, coluna, minimo, maximo):
 #função de normalização 
 def save_scalers(df, nome_colunas):
     # Caminho para salvar os scalers
-    output_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "objects"))
+    output_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "objects/preprocess_result"))
     os.makedirs(output_dir, exist_ok=True)  # cria a pasta se não existir
 
     for nome_coluna in nome_colunas:
@@ -93,7 +93,7 @@ def save_scalers(df, nome_colunas):
 #função label encoding
 def save_encoders(df, nome_colunas):
     # Caminho para salvar os encoders
-    output_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "objects"))
+    output_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "objects/preprocess_result"))
     os.makedirs(output_dir, exist_ok=True)  # cria a pasta se não existir
 
     for nome_coluna in nome_colunas:
@@ -107,7 +107,7 @@ def save_encoders(df, nome_colunas):
 
 #função para salvar objetos como modelos treinados, scalers ou encoders
 def save_object(obj, filename):
-    output_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "objects"))
+    output_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "objects/preprocess_result"))
     os.makedirs(output_dir, exist_ok=True)
     joblib.dump(obj, os.path.join(output_dir, filename))
 
